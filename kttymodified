@@ -221,9 +221,10 @@ for i,v in pairs(getInfo("Inventory").Misc) do
 		startLarge = (v._am or 1)
 	end
 end
+local startBalloons = #workspace.__THINGS.BalloonGifts:GetChildren()
 local startTime = os.time()
 while getgenv().MoneyPrinter.autoBalloons do task.wait()
-	local startBalloons = #workspace.__THINGS.BalloonGifts:GetChildren()
+	
 	if getgenv().MoneyPrinter.autoPresents then getPresents() end
 	for _,Balloon in pairs(Library.Network.Invoke("BalloonGifts_GetActiveBalloons")) do task.wait(0.03)
 		if Balloon.Id then

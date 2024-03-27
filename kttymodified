@@ -208,9 +208,9 @@ autoLootBagConnection = workspace.__THINGS.Lootbags.ChildAdded:Connect(function(
 	v:Destroy()
 end)
 
---if #workspace.__THINGS.BalloonGifts:GetChildren() <= 1 then
---	repeat game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, getServer().id, Player) task.wait(3) until not game.PlaceId
-end
+-- if #workspace.__THINGS.BalloonGifts:GetChildren() <= 1 then
+-- 	repeat game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, getServer().id, Player) task.wait(3) until not game.PlaceId
+-- end
 local startGifts = 0
 local startLarge = 0
 for i,v in pairs(getInfo("Inventory").Misc) do

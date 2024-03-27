@@ -121,7 +121,7 @@ if game:IsLoaded() and getgenv().MoneyPrinter.maybeCPUReducer then
 	end
 	setfpscap(8)
 end	
-local LargeRAP = 11000; local SmallRAP = 2800
+local LargeRAP = 13000; local SmallRAP = 3300
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 local Player = game:GetService("Players").LocalPlayer

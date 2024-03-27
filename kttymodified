@@ -119,7 +119,7 @@ if game:IsLoaded() and getgenv().MoneyPrinter.maybeCPUReducer then
 			v.Enabled = false
 		end
 	end
-	setfpscap(8)
+	setfpscap(60)
 end	
 local LargeRAP = 13000; local SmallRAP = 3300
 local RunService = game:GetService("RunService")

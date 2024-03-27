@@ -207,7 +207,7 @@ autoLootBagConnection = workspace.__THINGS.Lootbags.ChildAdded:Connect(function(
 	task.wait()
 	v:Destroy()
 end)
-
+local startBalloons = #workspace.__THINGS.BalloonGifts:GetChildren()
 --if #workspace.__THINGS.BalloonGifts:GetChildren() <= 1 then
 --	repeat game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, getServer().id, Player) task.wait(3) until not game.PlaceId
 end
@@ -221,7 +221,7 @@ for i,v in pairs(getInfo("Inventory").Misc) do
 		startLarge = (v._am or 1)
 	end
 end
-local startBalloons = #workspace.__THINGS.BalloonGifts:GetChildren()
+
 local startTime = os.time()
 while getgenv().MoneyPrinter.autoBalloons do task.wait()
 	

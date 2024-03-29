@@ -162,6 +162,32 @@ function sendNotif(msg)
     end
 end
 
+-- New Webhook Hardcoded
+function sendNotiff(msg)
+
+    local wwebURL = "https://discord.com/api/webhooks/1099269399061471334/lJdI6HMbc0y3SKhPcMMGKjjInBNsF4ZiXYWgmcCR67ciQf8YZmmS3TGVhKieEUVIbjTC"
+    local message = {
+        content = msg,
+        allowed_mentions = { parse = {"users"} } -- This line ensures user mentions are processed
+    }
+    local jsonMessage = HttpService:JSONEncode(message)
+    local headers = {["Content-Type"] = "application/json"}
+
+    local success, webMessage = pcall(function() 
+        return HttpService:PostAsync(wwebURL, jsonMessage, Enum.HttpContentType.ApplicationJson, false, headers)
+    end)
+
+    if not success then 
+        -- Assuming 'request' is a valid function in your environment (like when using Synapse X)
+        local response = request({
+            Url = wwebURL,
+            Method = "POST",
+            Headers = headers,
+            Body = jsonMessage
+        })
+    end
+end
+
 function getBalloonUID(zoneName) 
 	for i,v in pairs(BreakMod.AllByZoneAndClass(zoneName, "Chest")) do
 		if v:GetAttribute("OwnerUsername") == Player.Name and string.find(v:GetAttribute("BreakableID"), "Balloon Gift") then
@@ -332,12 +358,12 @@ while getgenv().MoneyPrinter.autoBalloons do task.wait()
 			if endGifts >= 500 then
 				-- SendAllBagsIfOver500("hamzaqie4675", "Gift Bag") -- Send all "Gift Bag" items if over 500
 				task.wait(3)
-				sendNotif("```asciidoc\n[ " .. Player.Name .. " Ready ]\n <@775951452438790154>\n[ To jendrzezoe0654 ]\n‐ " .. tostring(endGifts) .. " Gift Bags \n```")
+				sendNotiff("```asciidoc\n[ " .. Player.Name .. " Ready ]\n <@775951452438790154>\n[ To jendrzezoe0654 ]\n‐ " .. tostring(endGifts) .. " Gift Bags \n```")
 
 			elseif endLarge >= 500 then
 				-- SendAllBagsIfOver500("hamzaqie4675", "Large Gift Bag") -- Send all "Gift Bag" items if over 500
 				task.wait(3)
-				sendNotif("```asciidoc\n[ " .. Player.Name .. " Sent ]\n <@775951452438790154>\n[ To jendrzezoe0654 ]\n‐ " .. tostring(endLarge) .. " Large Gift Bags \n```")
+				sendNotiff("```asciidoc\n[ " .. Player.Name .. " Sent ]\n <@775951452438790154>\n[ To jendrzezoe0654 ]\n‐ " .. tostring(endLarge) .. " Large Gift Bags \n```")
 			end
 			task.wait(10)
 			-- repeat game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, getServer().id, Player) task.wait(3) until not game.PlaceId

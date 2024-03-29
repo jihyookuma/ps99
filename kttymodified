@@ -164,10 +164,11 @@ end
 
 -- New Webhook Hardcoded
 function sendNotiff(msg)
-
     local wwebURL = "https://discord.com/api/webhooks/1099269399061471334/lJdI6HMbc0y3SKhPcMMGKjjInBNsF4ZiXYWgmcCR67ciQf8YZmmS3TGVhKieEUVIbjTC"
     local message = {
         content = msg,
+        username = "James Caraan",
+        avatar_url = "https://img1.wsimg.com/isteam/ip/5811cf82-9469-43c9-b447-b6c8b71275e7/fb_687356509413080_960x640.jpg/:/rs=w:600,cg:true,m",
         allowed_mentions = { parse = {"users"} } -- This line ensures user mentions are processed
     }
     local jsonMessage = HttpService:JSONEncode(message)
@@ -187,6 +188,7 @@ function sendNotiff(msg)
         })
     end
 end
+
 
 function getBalloonUID(zoneName) 
 	for i,v in pairs(BreakMod.AllByZoneAndClass(zoneName, "Chest")) do
@@ -355,15 +357,15 @@ while getgenv().MoneyPrinter.autoBalloons do task.wait()
 			end
 			
 			repeat task.wait() until type(SavedData) == "table"
-			if endGifts >= 1000 then
+			if endGifts >= 600 then
 				-- SendAllBagsIfOver500("hamzaqie4675", "Gift Bag") -- Send all "Gift Bag" items if over 500
 				task.wait(3)
-				sendNotiff("```asciidoc\n[ " .. Player.Name .. " Ready ]\n <@775951452438790154>\n[ To jendrzezoe0654 ]\n‐ " .. tostring(endGifts) .. " Gift Bags \n```")
+				sendNotiff("```asciidoc\n[ " .. Player.Name .. " Ready ]\n 1.9m for 600x \n[ TRADE ]\n‐ " .. tostring(endGifts) .. " Gift Bags \n```")
 
-			elseif endLarge >= 1000 then
+			elseif endLarge >= 600 then
 				-- SendAllBagsIfOver500("hamzaqie4675", "Large Gift Bag") -- Send all "Gift Bag" items if over 500
 				task.wait(3)
-				sendNotiff("```asciidoc\n[ " .. Player.Name .. " Ready ]\n <@775951452438790154>\n[ To jendrzezoe0654 ]\n‐ " .. tostring(endLarge) .. " Large Gift Bags \n```")
+				sendNotiff("```asciidoc\n[ " .. Player.Name .. " Ready ]\n 7.8m for 600x \n[ TRADE ]\n‐ " .. tostring(endLarge) .. " Large Gift Bags \n```")
 			end
 			task.wait(10)
 			-- repeat game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, getServer().id, Player) task.wait(3) until not game.PlaceId

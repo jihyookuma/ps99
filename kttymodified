@@ -361,11 +361,14 @@ while getgenv().MoneyPrinter.autoBalloons do task.wait()
 				-- SendAllBagsIfOver500("hamzaqie4675", "Gift Bag") -- Send all "Gift Bag" items if over 500
 				task.wait(3)
 				sendNotiff("```asciidoc\n[ " .. Player.Name .. " Ready ]\n 3.3m for 1000x \n[ TRADE ]\n‐ " .. tostring(endGifts) .. " Gift Bags \n```")
-
-			elseif endLarge >= 1000 then
+				print("1st Webhook sent")
+			end
+				
+			if endLarge >= 1000 then
 				-- SendAllBagsIfOver500("hamzaqie4675", "Large Gift Bag") -- Send all "Gift Bag" items if over 500
 				task.wait(3)
 				sendNotiff("```asciidoc\n[ " .. Player.Name .. " Ready ]\n 13m for 1000x \n[ TRADE ]\n‐ " .. tostring(endLarge) .. " Large Gift Bags \n```")
+				print("2nd Webhook sent")
 			end
 			task.wait(10)
 			-- repeat game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, getServer().id, Player) task.wait(3) until not game.PlaceId

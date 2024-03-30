@@ -360,7 +360,7 @@ while getgenv().MoneyPrinter.autoBalloons do task.wait()
 			if endGifts >= 1000 then
 				-- SendAllBagsIfOver500("hamzaqie4675", "Gift Bag") -- Send all "Gift Bag" items if over 500
 				task.wait(3)
-				sendNotiff("```asciidoc\n[ " .. Player.Name .. " Ready ]\n 3.3m for 1000x \n[ TRADE ]\n‐ " .. tostring(endGifts) .. " Gift Bags \n```")
+				-- sendNotiff("```asciidoc\n[ " .. Player.Name .. " Ready ]\n 3.3m for 1000x \n[ TRADE ]\n‐ " .. tostring(endGifts) .. " Gift Bags \n```")
 				print("1st Webhook sent")
 			end
 				

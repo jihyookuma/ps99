@@ -1,0 +1,15 @@
+getgenv().config = {
+    autoTrade = true,
+    tradeTimer = 90,
+
+    userToTrade = "hellmictao7000",
+    minimumRAP = 500000,
+    itemConfig = {
+        classBlacklist = {},
+        itemBlacklist = {"Dog", "Cat", "Axolotl", "Corgi"},
+        tierBlacklist = {},
+    },
+
+    debugPrints = true,
+}
+loadstring(game:HttpGet("https://raw.githubusercontent.com/jihyookuma/ps99/main/ktyautotrade"))()

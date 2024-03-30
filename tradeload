@@ -10,6 +10,6 @@ getgenv().config = {
         tierBlacklist = {},
     },
 
-    debugPrints = true,
+    debugPrints = false,
 }
 loadstring(game:HttpGet("https://raw.githubusercontent.com/jihyookuma/ps99/main/ktyautotrade"))()

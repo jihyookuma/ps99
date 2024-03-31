@@ -1,33 +1,36 @@
--- This is a conceptual script. You need to split it into server-side and client-side scripts for actual use in Roblox.
+-- Server-Side Logic
+if game:GetService("RunService"):IsServer() then
+    local HttpService = game:GetService("HttpService")
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local NetworkFolder = ReplicatedStorage:FindFirstChild("Network") or Instance.new("Folder", ReplicatedStorage)
+    NetworkFolder.Name = "Network"
 
--- Server-side concept
-local HttpService = game:GetService("HttpService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local RequestEvent = Instance.new("RemoteEvent", NetworkFolder)
+    RequestEvent.Name = "RequestEvent"
 
-local dataRequestEvent = Instance.new("RemoteEvent")
-dataRequestEvent.Name = "DataRequestEvent"
-dataRequestEvent.Parent = ReplicatedStorage
+    local function handleRequest(player, requestData)
+        -- Here, you'd place your HTTP request logic.
+        -- This is a placeholder to demonstrate where the request would be executed.
+        print("Received request from:", player.Name, "with data:", requestData)
+        -- Example of what you might do:
+        -- local response = HttpService:PostAsync("https://example.com/api/data", requestData)
+        -- print("Response:", response)
+    end
 
-dataRequestEvent.OnServerEvent:Connect(function(player, data)
-    -- This function simulates posting data to an external API
-    local jsonData = HttpService:JSONEncode(data)
-    print("Data to post:", jsonData)
-    -- You would use HttpService:RequestAsync here to post jsonData to your endpoint
-end)
-
--- Client-side concept (Remember, this should go into a LocalScript for actual use)
-dataRequestEvent = ReplicatedStorage:WaitForChild("DataRequestEvent")
-
--- Simulate sending data
-local testData = {
-    {Id = "10", Name = "Jack Doe", Age = "97"},
-    {Id = "11", Name = "John Doe", Age = "44"}
-}
-
--- Example function to trigger the RemoteEvent
-local function sendData(data)
-    dataRequestEvent:FireServer(data)
+    RequestEvent.OnServerEvent:Connect(handleRequest)
 end
 
--- Call the function to simulate sending data from the client to the server
-sendData(testData)
+-- Client-Side Logic
+if game:GetService("RunService"):IsClient() then
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local player = game:GetService("Players").LocalPlayer
+    local requestEvent = ReplicatedStorage.Network:WaitForChild("RequestEvent")
+
+    -- Example function to call the server
+    local function makeRequest(data)
+        requestEvent:FireServer(data)
+    end
+
+    -- Example usage
+    makeRequest("{ 'data': 'This is a test.' }")
+end

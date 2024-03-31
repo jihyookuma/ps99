@@ -1,34 +1,33 @@
+-- This is a conceptual script. You need to split it into server-side and client-side scripts for actual use in Roblox.
+
+-- Server-side concept
 local HttpService = game:GetService("HttpService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local DataRequestEvent = ReplicatedStorage:WaitForChild("DataRequestEvent")
 
-local function postDataToSheet(data)
+local dataRequestEvent = Instance.new("RemoteEvent")
+dataRequestEvent.Name = "DataRequestEvent"
+dataRequestEvent.Parent = ReplicatedStorage
+
+dataRequestEvent.OnServerEvent:Connect(function(player, data)
+    -- This function simulates posting data to an external API
     local jsonData = HttpService:JSONEncode(data)
-    local response = HttpService:RequestAsync({
-        Url = "https://sheet.best/api/sheets/YOUR_SHEET_ID",
-        Method = "POST",
-        Headers = {["Content-Type"] = "application/json"},
-        Body = jsonData
-    })
-    
-    print(response.StatusCode, response.Body)
-end
-
-DataRequestEvent.OnServerEvent:Connect(function(player, data)
-    postDataToSheet(data)
+    print("Data to post:", jsonData)
+    -- You would use HttpService:RequestAsync here to post jsonData to your endpoint
 end)
 
+-- Client-side concept (Remember, this should go into a LocalScript for actual use)
+dataRequestEvent = ReplicatedStorage:WaitForChild("DataRequestEvent")
 
--- Example data
-local data = {
+-- Simulate sending data
+local testData = {
     {Id = "10", Name = "Jack Doe", Age = "97"},
     {Id = "11", Name = "John Doe", Age = "44"}
 }
 
--- Function to trigger the event
-local function sendData()
-    DataRequestEvent:FireServer(data)
+-- Example function to trigger the RemoteEvent
+local function sendData(data)
+    dataRequestEvent:FireServer(data)
 end
 
--- Example call to the function
-sendData()
+-- Call the function to simulate sending data from the client to the server
+sendData(testData)

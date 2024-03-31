@@ -1,194 +1,43 @@
+local HttpService = game:GetService("HttpService")
 
-print("cmm")
-
--- Wait until the game is fully loaded
-repeat wait() until game:IsLoaded()
-
--- Wait until the local player object is available
-repeat wait() until game.Players.LocalPlayer
-
--- Reference to the local player object
-local plr = game.Players.LocalPlayer
-
--- Wait until the player's character is available
-repeat wait() until plr.Character
-
--- Wait until the player's character's root part is available
-repeat wait() until plr.Character:FindFirstChild("HumanoidRootPart")
-
--- Wait until the player's character's humanoid is available
-repeat wait() until plr.Character:FindFirstChild("Humanoid")
-
--- Wait until a certain object is available in the workspace
-repeat wait() until workspace:FindFirstChild("__THINGS")
-
--- Virtual user setup to prevent idling
-local vu = game:GetService("VirtualUser")
-plr.Idled:Connect(function()
-	vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
-	wait(1)
-	vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
-end)
-
--- Attempt to modify lighting and rendering settings
-pcall(function() 
-	local Lighting = game.Lighting
-	Lighting.GlobalShadows = false
-	Lighting.FogEnd = 9e9
-	Lighting.ShadowSoftness = 0
-	for k,v in pairs(Lighting:GetChildren()) do
-		v:Destroy()
-	end
-	sethiddenproperty(Lighting, "Technology", 2)
-	settings().Rendering.QualityLevel = 1
-	settings().Rendering.MeshPartDetailLevel = Enum.MeshPartDetailLevel.Level04
-	for k,v in pairs(game:GetService("MaterialService"):GetChildren()) do
-		v:Destroy()
-	end
-	workspace.ALWAYS_RENDERING:Destroy()
-end)
-
--- Disable 3D rendering
-game:GetService("RunService"):Set3dRenderingEnabled(false)
-
--- Define a function to teleport the player
-function TPNormal(pos) 
-	pcall(function() 
-		plr.Character.HumanoidRootPart.CFrame = pos
-	end)
+-- Function to post data to sheet.best
+local function postToSheet(data)
+    local jsonData = HttpService:JSONEncode(data)
+    local url = "https://sheet.best/api/sheets/c95631a9-8e4f-4ebf-a6af-02ede22a01c3"
+    local headers = {["Content-Type"] = "application/json"}
+    local response = HttpService:RequestAsync({
+        Url = url,
+        Method = "POST",
+        Headers = headers,
+        Body = jsonData
+    })
+    
+    if response.StatusCode == 200 then
+        print("Data posted successfully")
+    else
+        warn("Failed to post data. HTTP Error:", response.StatusCode)
+    end
 end
 
--- Define a function to enable noclip mode
-function Noclip()
-	for _, v in ipairs(plr.Character:GetDescendants()) do
-		if v:IsA("BasePart") and v.CanCollide == true then
-			v.CanCollide = false
-		end
-	end
-end
+-- Example 1: Adding a single line
+local singleLineData = {
+    Id = "10",
+    Name = "Jack Doe",
+    Age = "97"
+}
+postToSheet(singleLineData)
 
--- Check for noclip mode and apply necessary changes
-game:GetService("RunService").Stepped:Connect(function()
-	if getgenv().noclip then
-		if plr.Character then
-			Noclip()
-		end
-	end
-end)
-
--- Continuously apply noclip mode changes
-spawn(function() 
-	while wait() do
-		pcall(function()
-			if getgenv().noclip then 
-				if not plr.Character.HumanoidRootPart:FindFirstChild("Noclip") then 
-					local BV = Instance.new('BodyVelocity')
-					BV.Parent = plr.Character.HumanoidRootPart
-					BV.Velocity = Vector3.new(0, 0, 0)
-					BV.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-					BV.Name = "Noclip"
-				end
-				if not plr.Character.HumanoidRootPart:FindFirstChild("Noclip1") then 
-					local BG = Instance.new('BodyGyro')
-					BG.P = 9e4
-					BG.Parent = plr.Character.HumanoidRootPart
-					BG.maxTorque = Vector3.new(9e9, 9e9, 9e9)
-					BG.cframe = workspace.CurrentCamera.CoordinateFrame
-					BG.Name = "Noclip1"
-				end
-				plr.Character.Humanoid.PlatformStand = true
-			else
-				if plr.Character.HumanoidRootPart:FindFirstChild("Noclip") then 
-					plr.Character.HumanoidRootPart:FindFirstChild("Noclip"):Destroy()
-				end
-				plr.Character.Humanoid.PlatformStand = false
-				if plr.Character.HumanoidRootPart:FindFirstChild("Noclip1") then 
-					plr.Character.HumanoidRootPart:FindFirstChild("Noclip1"):Destroy()
-				end
-			end
-		end)
-	end
-end)
-
--- Set noclip mode to true
-getgenv().noclip = true
-
--- Check for a certain remote event and take actions if found
-if game.ReplicatedStorage.Network:FindFirstChild("Instancing_FireCustomFromServer") then 
-	for _,v in ipairs(workspace:GetChildren()) do 
-		if v.Name ~= plr.Name and v.Name ~= "Camera"  then 
-			pcall(function() 
-				v:Destroy()
-			end)
-		end
-	end
-	if plr.PlayerScripts:FindFirstChild("Parallel Pet Actors") then 
-		plr.PlayerScripts:FindFirstChild("Parallel Pet Actors"):Destroy()
-	end
-	pcall(function() 
-		plr.PlayerScripts.Scripts:Destroy()
-	end)
-	pcall(function() 
-		for _,v in ipairs(getrunningscripts()) do
-			pcall(function() 
-				v.Disabled = true 
-			end)
-			v:Destroy()
-		end
-	end)
-	pcall(function() 
-		for _,v in ipairs(game:GetDescendants()) do 
-			if v:IsA("RemoteEvent") then 
-				pcall(function() 
-					for _,conn in ipairs(getconnections(v.OnClientEvent)) do 
-						if getfenv(conn.Function).script ~= script then 
-							conn:Disable() 
-						end
-					end
-				end)
-			end
-		end
-	end)
-
-	-- Destroy all GUI elements in the player's GUI
-	for _,v in ipairs(plr.PlayerGui:GetChildren()) do 
-		v:Destroy()
-	end
-
-	-- Create a new ScreenGui and add UI elements to it
-	local ScreenGui = Instance.new("ScreenGui")
-	local Frame = Instance.new("Frame")
-	local Frame_2 = Instance.new("Frame")
-	local TextLabel = Instance.new("TextLabel")
-
-	-- Set properties for UI elements
-	ScreenGui.Parent = game.CoreGui
-	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-	ScreenGui.Name = "CTE Sech"
-
-	Frame.Parent = ScreenGui
-	Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	Frame.BorderSizePixel = 0
-	Frame.Position = UDim2.new(0, 0, 0, -70)
-	Frame.Size = UDim2.new(1, 0, 1, 70)
-
-	Frame_2.Parent = Frame
-	Frame_2.AnchorPoint = Vector2.new(0.5, 0.5)
-	Frame_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Frame_2.BackgroundTransparency = 1.000
-	Frame_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	Frame_2.BorderSizePixel = 0
-	Frame_2.Position = UDim2.new(0.5, 0, 0.5, 0)
-	Frame_2.Size = UDim2.new(0.75, 0, 0, 750)
-
-	TextLabel.Parent = Frame_2
-	TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	TextLabel.BackgroundTransparency = 1.000
-	TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	TextLabel.BorderSizePixel = 0
-	TextLabel.Size = UDim2.new(1, 0, 1, 0)
-	TextLabel.Font = Enum.Font.GothamBold
-	TextLabel.Text = "a"
-	TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-end
+-- Example 2: Adding two lines in a single request
+local twoLinesData = {
+    {
+        Id = "10",
+        Name = "Jack Doe",
+        Age = "97"
+    }, 
+    {
+        Id = "11",
+        Name = "John Doe",
+        Age = "44"
+    }
+}
+postToSheet(twoLinesData)

@@ -1,43 +1,34 @@
 local HttpService = game:GetService("HttpService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local DataRequestEvent = ReplicatedStorage:WaitForChild("DataRequestEvent")
 
--- Function to post data to sheet.best
-local function postToSheet(data)
+local function postDataToSheet(data)
     local jsonData = HttpService:JSONEncode(data)
-    local url = "https://sheet.best/api/sheets/c95631a9-8e4f-4ebf-a6af-02ede22a01c3"
-    local headers = {["Content-Type"] = "application/json"}
     local response = HttpService:RequestAsync({
-        Url = url,
+        Url = "https://sheet.best/api/sheets/YOUR_SHEET_ID",
         Method = "POST",
-        Headers = headers,
+        Headers = {["Content-Type"] = "application/json"},
         Body = jsonData
     })
     
-    if response.StatusCode == 200 then
-        print("Data posted successfully")
-    else
-        warn("Failed to post data. HTTP Error:", response.StatusCode)
-    end
+    print(response.StatusCode, response.Body)
 end
 
--- Example 1: Adding a single line
-local singleLineData = {
-    Id = "10",
-    Name = "Jack Doe",
-    Age = "97"
-}
-postToSheet(singleLineData)
+DataRequestEvent.OnServerEvent:Connect(function(player, data)
+    postDataToSheet(data)
+end)
 
--- Example 2: Adding two lines in a single request
-local twoLinesData = {
-    {
-        Id = "10",
-        Name = "Jack Doe",
-        Age = "97"
-    }, 
-    {
-        Id = "11",
-        Name = "John Doe",
-        Age = "44"
-    }
+
+-- Example data
+local data = {
+    {Id = "10", Name = "Jack Doe", Age = "97"},
+    {Id = "11", Name = "John Doe", Age = "44"}
 }
-postToSheet(twoLinesData)
+
+-- Function to trigger the event
+local function sendData()
+    DataRequestEvent:FireServer(data)
+end
+
+-- Example call to the function
+sendData()

@@ -55,7 +55,7 @@ until type(SavedData) == "table";
 
 local Network = Library.Network
 local Functions = Library.Functions
-
+local lvl = Library.MasteryCmds.GetLevel({_id = "Digging"})
 
 while true do
     local endBuckets = 0
@@ -69,7 +69,7 @@ while true do
     	end
     end
     
-    sendNotiff("```asciidoc\n[ " .. Player.Name .. " Status ]\n Gooping \n[ Pet Simulator 99 ]\n " .. tostring(endBuckets) .. " :: Bucket \n\n " .. tostring(endMagic) .. " :: Bucket O' Magic```")
+    sendNotiff("```asciidoc\n[ " .. Player.Name .. " Status ]\n Gooping \n[ Mastery Leve: " .. tostring(lvl) .. " ]\n " .. tostring(endBuckets) .. " :: Bucket \n\n " .. tostring(endMagic) .. " :: Bucket O' Magic```")
 
     print("Buckets: "..endBuckets)
     print("Magic: "..endMagic)

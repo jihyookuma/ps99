@@ -69,9 +69,9 @@ while true do
     	end
     end
     
-    sendNotiff("```asciidoc\n[ " .. Player.Name .. " Status ]\n Gooping \n[ Pet Simulator 99 ]\n " .. tostring(endBuckets) .. " :: Bucket \n\n" .. tostring(endMagic) .. " :: Bucket O' Magic```")
+    sendNotiff("```asciidoc\n[ " .. Player.Name .. " Status ]\n Gooping \n[ Pet Simulator 99 ]\n " .. tostring(endBuckets) .. " :: Bucket \n\n " .. tostring(endMagic) .. " :: Bucket O' Magic```")
 
     print("Buckets: "..endBuckets)
-    print("Buckets: "..endMagic)
+    print("Magic: "..endMagic)
     task.wait(300)
 end

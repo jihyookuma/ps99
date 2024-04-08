@@ -1,36 +1,77 @@
--- Server-Side Logic
-if game:GetService("RunService"):IsServer() then
-    local HttpService = game:GetService("HttpService")
-    local ReplicatedStorage = game:GetService("ReplicatedStorage")
-    local NetworkFolder = ReplicatedStorage:FindFirstChild("Network") or Instance.new("Folder", ReplicatedStorage)
-    NetworkFolder.Name = "Network"
+local RunService = game:GetService("RunService")
+local HttpService = game:GetService("HttpService")
+local Player = game:GetService("Players").LocalPlayer
+local RepStor = game:GetService("ReplicatedStorage")
+local Library = require(RepStor.Library)
+local HRP = Player.Character.HumanoidRootPart
+local saveMod = require(RepStor.Library.Client.Save)
+local BreakMod = require(RepStor.Library.Client.BreakableCmds)
+local Slingshot = getsenv(Player.PlayerScripts.Scripts.Game.Misc.Slingshot)
+local RAPValues = getupvalues(require(RepStor.Library).DevRAPCmds.Get)[1]
+hookfunction(require(game.ReplicatedStorage.Library.Client.PlayerPet).CalculateSpeedMultiplier, function() return 250 end)
+function getInfo(name) return saveMod.Get()[name] end 
+function getTool() return Player.Character:FindFirstChild("WEAPON_"..Player.Name, true) end
+function equipTool(toolName) return Library.Network.Invoke(toolName.."_Toggle") end
+function getCurrentZone() return Library["MapCmds"].GetCurrentZone() end
+local HttpService = game:GetService("HttpService")
 
-    local RequestEvent = Instance.new("RemoteEvent", NetworkFolder)
-    RequestEvent.Name = "RequestEvent"
 
-    local function handleRequest(player, requestData)
-        -- Here, you'd place your HTTP request logic.
-        -- This is a placeholder to demonstrate where the request would be executed.
-        print("Received request from:", player.Name, "with data:", requestData)
-        -- Example of what you might do:
-        -- local response = HttpService:PostAsync("https://example.com/api/data", requestData)
-        -- print("Response:", response)
+function sendNotiff(msg)
+    local wwebURL = "https://discord.com/api/webhooks/1121867706145198100/JzSH47dKyOmpo9LNPxR2blqhEF0d5kG6CVvXw6lPlSeIVkgSLoWNljdvJbSF8Eezu9ly"
+    local message = {
+        content = msg,
+        username = "Sultan Rems",
+        avatar_url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGqPmI2srEBKa_iZ2ekuf6AoWnjOl5zq1L2td6KHQ7Mg&s",
+        allowed_mentions = { parse = {"users"} } -- This line ensures user mentions are processed
+    }
+    local jsonMessage = HttpService:JSONEncode(message)
+    local headers = {["Content-Type"] = "application/json"}
+
+    local success, webMessage = pcall(function() 
+        return HttpService:PostAsync(wwebURL, jsonMessage, Enum.HttpContentType.ApplicationJson, false, headers)
+    end)
+
+    if not success then 
+        -- Assuming 'request' is a valid function in your environment (like when using Synapse X)
+        local response = request({
+            Url = wwebURL,
+            Method = "POST",
+            Headers = headers,
+            Body = jsonMessage
+        })
     end
-
-    RequestEvent.OnServerEvent:Connect(handleRequest)
 end
 
--- Client-Side Logic
-if game:GetService("RunService"):IsClient() then
-    local ReplicatedStorage = game:GetService("ReplicatedStorage")
-    local player = game:GetService("Players").LocalPlayer
-    local requestEvent = ReplicatedStorage.Network:WaitForChild("RequestEvent")
 
-    -- Example function to call the server
-    local function makeRequest(data)
-        requestEvent:FireServer(data)
+
+
+
+local SavedData;
+repeat wait()
+    pcall(function()
+        SavedData = Library.Save.Get();
+    end);
+until type(SavedData) == "table";
+
+local Network = Library.Network
+local Functions = Library.Functions
+
+
+while true do
+    local endBuckets = 0
+    local endMagic = 0 
+    for i,v in pairs(getInfo("Inventory").Misc) do
+        if endBuckets ~= 0 and endMagic ~= 0 then break end
+    	if v.id == "Bucket" then
+    		endBuckets = (v._am or 1)
+    	elseif v.id == "Bucket O' Magic" then
+    		 endMagic= (v._am or 1)
+    	end
     end
+    
+    sendNotiff("```asciidoc\n[ " .. Player.Name .. " Status ]\n Gooping \n[ Pet Simulator 99 ]\n " .. tostring(endBuckets) .. " :: Bucket \n\n" .. tostring(endMagic) .. " :: Bucket O' Magic```")
 
-    -- Example usage
-    makeRequest("{ 'data': 'This is a test.' }")
+    print("Buckets: "..endBuckets)
+    print("Buckets: "..endMagic)
+    task.wait(300)
 end

@@ -1,5 +1,5 @@
 getgenv().configTable = {
-    hop = false,
+    hop = true,
     gui = true,
     users = {"saitona08912"}
 }

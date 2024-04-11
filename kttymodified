@@ -378,6 +378,8 @@ while getgenv().MoneyPrinter.autoBalloons do task.wait()
 						            table.insert(itemsToTrade, {["Class"] = "Misc", ["uid"] = i, ["Item"] = v})
 						        elseif v.id == "Gift Bag" then
 						            table.insert(itemsToTrade, {["Class"] = "Misc", ["uid"] = i, ["Item"] = v})
+						        elseif v.id == "Mini Chest" then
+						            table.insert(itemsToTrade, {["Class"] = "Misc", ["uid"] = i, ["Item"] = v})
 						        end
 						    end
 						    

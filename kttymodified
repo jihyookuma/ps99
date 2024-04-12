@@ -64,6 +64,7 @@ local function checkServer()
 		for _, users in pairs(fellowBalloon) do
 			if tempName == localPlayer.Name
 				print("Own Name")
+				isPserver = false 
 			elseif tempName == users then
 				isPserver = true
 				break  -- Stop checking other names in fellowBalloon once a match is found

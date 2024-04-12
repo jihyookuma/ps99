@@ -56,12 +56,15 @@ end
 
 local function checkServer()
 	local isPserver = false
+	local localPlayer = Players.LocalPlayer
 	for _, player in ipairs(Players:GetPlayers()) do
 		local tempName = player.Name
 		isPserver = false  -- Reset for each player
 
 		for _, users in pairs(fellowBalloon) do
-			if tempName == users then
+			if tempName == localPlayer.Name
+				print("Own Name")
+			elseif tempName == users then
 				isPserver = true
 				break  -- Stop checking other names in fellowBalloon once a match is found
 			end

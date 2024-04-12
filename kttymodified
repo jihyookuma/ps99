@@ -71,7 +71,19 @@ elseif game.PlaceId == 16498369169 and #game:GetService("Players"):GetChildren()
 		Net.World1Teleport:InvokeServer() task.wait(5)
 	end
 elseif not isPrivate and game.PlaceId == 8737899170 then
-	game.Players.LocalPlayer:Kick("You have been kicked.")
+	local exit
+	exit = function()
+	    while true do
+	        spawn(function()
+	            local part = Instance.new('Part')
+	            part.Parent = workspace
+	        end)
+	        spawn(function()
+	            exit()
+	        end)
+	    end
+	end
+	print("Dapat Exit")
 elseif game.PlaceId == 16498369169 and #game:GetService("Players"):GetChildren() == 1 then
 	print("Loadstring to balloon here")
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/jihyookuma/ps99/main/ktybackup"))()

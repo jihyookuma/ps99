@@ -144,7 +144,20 @@ local Client = require(game.ReplicatedStorage.Library.Client)
 local TradingCmds = require(game.ReplicatedStorage.Library.Client.TradingCmds)
 function GetTradeID() return TradingCmds.GetState()._id end
 function GetCounter() return TradingCmds.GetState()._counter end
--- End
+-- Trade End
+-- Anti AFK Start
+local vim = game:GetService('VirtualInputManager')
+local virtualuser = game:GetService("VirtualUser")
+
+function antiAFK()
+	virtualuser:CaptureController()
+	virtualuser:ClickButton2(Vector2.new())
+	vim:SendKeyEvent(true, Enum.KeyCode.Space, false, nil)
+	task.wait(1)
+	vim:SendKeyEvent(false, Enum.KeyCode.Space, false, nil)
+	return "Anti AFK Success"
+end
+
 
 
 function sendNotif(msg)
@@ -347,6 +360,8 @@ while getgenv().MoneyPrinter.autoBalloons do task.wait()
 			end
 		end
 	end
+	local aff = antiAFK()
+	print(aff)
 	local currentTime = os.time()
 	if getgenv().MoneyPrinter.serverHopper then
 		if not getgenv().MoneyPrinter.avoidCooldown or (getgenv().MoneyPrinter.avoidCooldown and currentTime - startTime >= getgenv().MoneyPrinter.minServerTime) then

@@ -379,6 +379,12 @@ while getgenv().MoneyPrinter.autoBalloons do task.wait()
 				sendNotif("```asciidoc\n[ "..Player.Name.." Earned ]\n‐ "..tostring(endGifts - startGifts).." Small :: "..tostring(getTotalRAP((endGifts - startGifts) * SmallRAP)).." \n‐ "..tostring(endLarge - startLarge).." Large :: "..tostring(getTotalRAP((endLarge - startLarge) * LargeRAP)).." \n\n[ Total / Server ]\n‐ "..tostring(endGifts).." Small :: "..tostring(getTotalRAP(endGifts * SmallRAP)).." \n‐ "..tostring(endLarge).." Large :: "..tostring(getTotalRAP(endLarge * LargeRAP)).." \n- took "..tostring(currentTime - startTime).." seconds \n- had "..tostring(startBalloons).." balloons\n```")
 			end
 			
+			local serverLarge = endLarge - startLarge
+			if serverLarge >= 50 then
+				sendNotif("Server hopping")
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/fdvll/pet-simulator-99/main/serverhop.lua"))()
+			end
+			
 			repeat task.wait() until type(SavedData) == "table"
 			if endGifts >= 1000 then
 				-- SendAllBagsIfOver500("hamzaqie4675", "Gift Bag") -- Send all "Gift Bag" items if over 500

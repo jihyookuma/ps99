@@ -380,7 +380,7 @@ while getgenv().MoneyPrinter.autoBalloons do task.wait()
 			end
 			
 			local serverLarge = endLarge - startLarge
-			if serverLarge >= 50 then
+			if serverLarge >= 15 then
 				sendNotif("Server hopping\n"..tostring(currentTime - startTime).." seconds")
 				loadstring(game:HttpGet("https://raw.githubusercontent.com/fdvll/pet-simulator-99/main/serverhop.lua"))()
 			end

@@ -4,8 +4,9 @@ LoadingText2 = "Updating Library"
 LoadingText3 = "Getting Script"
 LoadingText4 = "Executing Script"
 LoadingText5 = "Error: Execution Failed, re-trying!"
-
-local ScriptTitle = "Huge Fossil Dragon Here"
+local name = game.Players.LocalPlayer.Name
+print(name)
+local ScriptTitle = name
 
 -- LOADING SCREEN
 if LoadingScreen ~= false then

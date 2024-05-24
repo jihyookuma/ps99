@@ -1,0 +1,36 @@
+task.wait(15)
+local Library = require(game.ReplicatedStorage:WaitForChild('Library'))
+local Things = workspace:WaitForChild("__THINGS")
+local Url = "https://discord.com/api/webhooks/1214635772821508208/vlmiprmG8LSAMV_wbySTViv8bUlrrkEXEUZtN8XcPPavrHXkxCzX9auri7QjFgr5OG3T"
+local Http = game:GetService("HttpService")
+local Msg = function(msg)
+    request({Url = Url,Method = "POST",Headers = {["Content-Type"] = "application/json"},Body = Http:JSONEncode({content = msg})})
+end
+
+local Plr = game:GetService("Players").LocalPlayer
+local hugeCache = {}
+local function getAllHuge()
+    local total = 0
+    local save = Library.Save.Get().Inventory
+    local newHuges = {}
+    for i, v in pairs(save.Pet) do
+        if string.find(v.id, "Huge") then
+            total = total + 1
+            if not hugeCache[i] then
+                hugeCache[i] = v
+                newHuges[i] = v
+            end
+        end
+    end
+	print("Total"..tostring(total))
+    return total
+end
+
+local hugeNum = getAllHuge()
+
+if hugeNum ~= 0 then
+	-- Webhook Here
+	repeat task.wait(1) until Plr.PlayerGui and not Plr.PlayerGui:FindFirstChild("__INTRO")
+	Msg(Plr.Name.." have "..hugeNum.." Fossil Dragon")
+	-- loadstring(game:HttpGet("https://raw.githubusercontent.com/jihyookuma/ps99/main/notifgui"))()
+end

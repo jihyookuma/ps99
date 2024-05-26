@@ -7,6 +7,8 @@ local Msg = function(msg)
     request({Url = Url,Method = "POST",Headers = {["Content-Type"] = "application/json"},Body = Http:JSONEncode({content = msg})})
 end
 
+
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Hype Wheel: Claim"):InvokeServer()
 local Plr = game:GetService("Players").LocalPlayer
 local hugeCache = {}
 local function getAllHuge()
